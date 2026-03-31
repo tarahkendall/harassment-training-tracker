@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Harassment Training Tracker</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#f8fafc;color:#1e293b;font-size:14px}
+  .wrap{max-width:1300px;margin:0 auto;padding:1.5rem}
+  h1{font-size:18px;font-weight:600;color:#1e293b}
+  .toolbar{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin:14px 0 10px}
+  .filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .filter-row span{font-size:12px;color:#64748b;min-width:44px}
+  button.pill{font-size:12px;padding:4px 12px;border-radius:99px;cursor:pointer;background:transparent;border:1px solid #e2e8f0;color:#334155;font-weight:400;transition:background .15s}
+  button.pill.active{background:#f1f5f9;border-color:#94a3b8;font-weight:600}
+  button.pill:hover{background:#f1f5f9}
+  .right-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input[type=text],input[type=date],select{font-size:12px;padding:4px 7px;border-radius:5px;border:1px solid #cbd5e1;background:#fff;color:#1e293b}
+  input[type=text]:focus,input[type=date]:focus,select:focus{outline:2px solid #93c5fd;border-color:#93c5fd}
+  input.search{font-size:13px;padding:5px 10px;border-radius:6px;border:1px solid #e2e8f0;width:210px}
+  .btn-primary{font-size:13px;padding:6px 16px;border-radius:6px;cursor:pointer;background:#3b82f6;color:#fff;border:none;font-weight:500}
+  .btn-primary:hover{background:#2563eb}
+  .btn-primary:disabled{opacity:.5;cursor:default}
+  .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0;background:#fff}
+  table{width:100%;border-collapse:collapse}
+  th{padding:8px 10px;text-align:left;font-size:12px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;background:#f8fafc;white-space:nowrap;cursor:pointer;user-select:none}
+  th.nosort{cursor:default}
+  td{padding:8px 10px;font-size:13px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#fafafa}
+  .pill-status{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:500}
+  .s-overdue{background:#fee2e2;color:#b91c1c}
+  .s-soon{background:#fef9c3;color:#92400e}
+  .s-ok{background:#dcfce7;color:#15803d}
+  .s-pending{background:#dbeafe;color:#1d4ed8}
+  .act-btn{font-size:12px;padding:3px 8px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid #e2e8f0;color:#334155;white-space:nowrap}
+  .act-btn:hover{background:#f1f5f9}
+  .act-btn.save{border-color:#86efac;color:#15803d}
+  .act-btn.cancel{color:#94a3b8}
+  .act-btn.term{color:#94a3b8}
+  .act-btn.restore{color:#3b82f6;border-color:#93c5fd}
+  .act-btn.danger{color:#ef4444;border-color:#fca5a5}
+  .acts{display:flex;gap:4px}
+  .footnote{font-size:12px;color:#94a3b8;margin-top:10px}
+  /* modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:100}
+  .modal{background:#fff;border-radius:12px;padding:1.5rem;width:100%;max-width:440px}
+  .modal h2{font-size:16px;font-weight:600;margin-bottom:16px}
+  .form-row{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
+  .form-row label{font-size:12px;color:#475569;font-weight:500}
+  .form-row input,.form-row select{width:100%}
+  .form-check{display:flex;align-items:center;gap:8px;font-size:13px;color:#334155;margin-bottom:12px}
+  .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+  .hint{font-size:11px;color:#94a3b8;margin-top:2px}
+  /* confirm dialog */
+  .confirm-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:200}
+  .confirm-box{background:#fff;border-radius:10px;padding:1.25rem 1.5rem;max-width:360px;width:100%}
+  .confirm-box h3{font-size:15px;font-weight:600;margin-bottom:8px}
+  .confirm-box p{font-size:13px;color:#475569;margin-bottom:16px}
+  .confirm-footer{display:flex;gap:8px;justify-content:flex-end}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+    <h1>Harassment Training Tracker</h1>
+    <button class="btn-primary" onclick="openAdd()">+ Add employee</button>
+  </div>
+
+  <div class="toolbar">
+    <div>
+      <div class="filter-row">
+        <span>Team:</span>
+        <button class="pill active" onclick="setTeam('all',this)">All</button>
+        <button class="pill" onclick="setTeam('US',this)">US</button>
+        <button class="pill" onclick="setTeam('CA',this)">Canada</button>
+      </div>
+      <div class="filter-row">
+        <span>Status:</span>
+        <button class="pill active" onclick="setStatus('all',this)">All</button>
+        <button class="pill" onclick="setStatus('overdue',this)" id="btn-overdue">Overdue</button>
+        <button class="pill" onclick="setStatus('due-soon',this)" id="btn-soon">Due soon</button>
+        <button class="pill" onclick="setStatus('ok',this)" id="btn-ok">Current</button>
+        <button class="pill" onclick="setStatus('pending',this)" id="btn-pending">Pending</button>
+      </div>
+    </div>
+    <div class="right-tools">
+      <button class="pill" id="term-btn" onclick="toggleTermView()">Terminated (0)</button>
+      <input class="search" type="text" placeholder="Search name or location…" oninput="searchQ=this.value;render()"/>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="setSort('name')">Name <span id="s-name"></span></th>
+          <th class="nosort"></th>
+          <th onclick="setSort('location')">Location <span id="s-location"></span></th>
+          <th class="nosort">Manager</th>
+          <th onclick="setSort('last')">Last trained <span id="s-last"></span></th>
+          <th onclick="setSort('due')">Due by <span id="s-due"></span></th>
+          <th class="nosort">Cycle</th>
+          <th class="nosort">Status</th>
+          <th class="nosort"></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <p class="footnote">Due soon = within 60 days &middot; Ontario = annual (OHSA) &middot; All others = biennial company policy &middot; Data saved in your browser</p>
+</div>
+
+<!-- Add/Edit modal -->
+<div class="modal-bg" id="modal" style="display:none">
+  <div class="modal">
+    <h2 id="modal-title">Add employee</h2>
+    <div class="form-row"><label>Name</label><input type="text" id="f-name"/></div>
+    <div class="form-row">
+      <label>Country</label>
+      <select id="f-country" onchange="updateLocationOptions()">
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+      </select>
+    </div>
+    <div class="form-row"><label>State / Province</label><select id="f-location"></select></div>
+    <div class="form-check"><input type="checkbox" id="f-manager"/><label for="f-manager">Manager</label></div>
+    <div class="form-row">
+      <label>Last training date</label>
+      <input type="date" id="f-last"/>
+      <div class="hint">Leave blank if new hire hasn't trained yet</div>
+    </div>
+    <div class="modal-footer">
+      <button class="act-btn cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" id="modal-save" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete -->
+<div class="confirm-bg" id="confirm-bg" style="display:none">
+  <div class="confirm-box">
+    <h3>Permanently delete?</h3>
+    <p id="confirm-msg">This will remove the employee record entirely and cannot be undone.</p>
+    <div class="confirm-footer">
+      <button class="act-btn cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="act-btn danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STATE_RULES = {
+  "Florida":{"months":24},"Virginia":{"months":24},"North Carolina":{"months":24},
+  "Massachusetts":{"months":24},"Pennsylvania":{"months":24},"South Carolina":{"months":24},
+  "Georgia":{"months":24},"Washington":{"months":24},"Oregon":{"months":24},"Idaho":{"months":24},
+  "Ontario":{"months":12},"Alberta":{"months":24},
+  "British Columbia":{"months":24},"Manitoba":{"months":24},"New Brunswick":{"months":24},
+  "Newfoundland and Labrador":{"months":24},"Nova Scotia":{"months":24},
+  "Prince Edward Island":{"months":24},"Quebec":{"months":24},"Saskatchewan":{"months":24},
+  "Alaska":{"months":24},"Arizona":{"months":24},"Arkansas":{"months":24},"California":{"months":24},
+  "Colorado":{"months":24},"Connecticut":{"months":24},"Delaware":{"months":24},
+  "Hawaii":{"months":24},"Illinois":{"months":24},"Indiana":{"months":24},"Iowa":{"months":24},
+  "Kansas":{"months":24},"Kentucky":{"months":24},"Louisiana":{"months":24},"Maine":{"months":24},
+  "Maryland":{"months":24},"Michigan":{"months":24},"Minnesota":{"months":24},
+  "Mississippi":{"months":24},"Missouri":{"months":24},"Montana":{"months":24},
+  "Nebraska":{"months":24},"Nevada":{"months":24},"New Hampshire":{"months":24},
+  "New Jersey":{"months":24},"New Mexico":{"months":24},"New York":{"months":24},
+  "North Dakota":{"months":24},"Ohio":{"months":24},"Oklahoma":{"months":24},
+  "Rhode Island":{"months":24},"South Dakota":{"months":24},"Tennessee":{"months":24},
+  "Texas":{"months":24},"Utah":{"months":24},"Vermont":{"months":24},
+  "West Virginia":{"months":24},"Wisconsin":{"months":24},"Wyoming":{"months":24},
+};
+const US_STATES=["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+const CA_PROVS=["Alberta","British Columbia","Manitoba","New Brunswick","Newfoundland and Labrador","Nova Scotia","Ontario","Prince Edward Island","Quebec","Saskatchewan"];
+
+const SEED=[
+  {name:"Jessica Mollica",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false},
+  {name:"Bianca Padilla",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Brianna Maguire",country:"US",location:"Virginia",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Brittany Musil",country:"US",location:"North Carolina",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Elena Silva",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Evan Nudd",country:"US",location:"Massachusetts",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Evan Wexler",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Jennifer Ouellette",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Jesse Hardt",country:"US",location:"Virginia",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Jonathan Magolnick",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Jonathan Schall",country:"US",location:"Pennsylvania",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Jonathan Valliere",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Lauren Pennington",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Lesli McMakin",country:"US",location:"South Carolina",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Lourdes Magolnick",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Meghan Rowledge",country:"US",location:"Massachusetts",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Mercy Padilla",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Mike Pacifico",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Nadia Bollin",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Reagan Friday",country:"US",location:"North Carolina",manager:true,last:"2025-05-01",newHire:false},
+  {name:"Robert Foley",country:"US",location:"Washington",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Steph Meyer",country:"US",location:"Oregon",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Tarah Kendall",country:"US",location:"Virginia",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Trevor Ballard",country:"US",location:"Georgia",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Bill Ulma",country:"US",location:"Pennsylvania",manager:false,last:"2025-10-01",newHire:false},
+  {name:"Noelle Suarez",country:"US",location:"Florida",manager:false,last:"2026-03-01",newHire:false},
+  {name:"Zach Borgman",country:"US",location:"Idaho",manager:false,last:"2026-03-01",newHire:false},
+  {name:"Andrea Baert",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Andrea Duchon",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false},
+  {name:"Cassandra Desrochers",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Danielle Evans",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Elisabeth Golubova",country:"CA",location:"Alberta",manager:false,last:null,newHire:true},
+  {name:"Gary Van Deelen",country:"CA",location:"Alberta",manager:false,last:"2025-01-01",newHire:false},
+  {name:"Jaslyne Felker",country:"CA",location:"Alberta",manager:false,last:"2026-02-01",newHire:false},
+  {name:"Jessica Enwood",country:"CA",location:"Alberta",manager:false,last:null,newHire:true},
+  {name:"Jessica Gamez",country:"CA",location:"Alberta",manager:false,last:"2026-03-01",newHire:false},
+  {name:"Kim Thrasher",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false},
+  {name:"Melanie Cain",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Ravneet Gill",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+  {name:"Ryan Biggs",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false},
+  {name:"Solomon Mulugeta",country:"CA",location:"Alberta",manager:false,last:"2026-02-01",newHire:false},
+  {name:"Wendy Baldwin",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+];
+
+// ── state ──────────────────────────────────────────────────────────────────
+let employees = [];
+let teamF="all", statusF="all", searchQ="", sortCol="due", sortDir="asc", showTerm=false;
+let editId=null, modalMode="add", modalId=null, pendingDeleteId=null;
+
+function load(){
+  const raw=localStorage.getItem("ht_employees");
+  if(raw){ employees=JSON.parse(raw); }
+  else { employees=SEED.map((e,i)=>({...e,id:i+1,terminated:false})); save(); }
+}
+function save(){ localStorage.setItem("ht_employees",JSON.stringify(employees)); }
+
+// ── date helpers ───────────────────────────────────────────────────────────
+function parseLocal(s){ if(!s)return null; const[y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+function addMonths(s,n){ const[y,m,d]=s.split("-").map(Number); return new Date(y,m-1+n,d); }
+function fmtMon(d){ return d.toLocaleDateString("en-US",{month:"short",year:"numeric"}); }
+function fmtFull(s){ if(!s)return null; const d=parseLocal(s); return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }
+function today(){ const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate()); }
+
+function statusOf(dueDate){
+  const diff=(dueDate-today())/(1000*60*60*24);
+  if(diff<0)return"overdue"; if(diff<=60)return"due-soon"; return"ok";
+}
+function getRule(loc){ return STATE_RULES[loc]||{months:24}; }
+
+function enriched(e){
+  const rule=getRule(e.location);
+  if(!e.last){ return{...e,due:null,status:"pending",months:rule.months}; }
+  const due=addMonths(e.last,rule.months);
+  return{...e,due,status:statusOf(due),months:rule.months};
+}
+
+// ── filters & sort ─────────────────────────────────────────────────────────
+function visible(){
+  let rows=employees.map(enriched).filter(e=>showTerm?e.terminated:!e.terminated);
+  if(teamF!=="all") rows=rows.filter(e=>e.country===teamF);
+  if(statusF!=="all") rows=rows.filter(e=>e.status===statusF);
+  if(searchQ) rows=rows.filter(e=>e.name.toLowerCase().includes(searchQ.toLowerCase())||e.location.toLowerCase().includes(searchQ.toLowerCase()));
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(sortCol==="name"){va=a.name;vb=b.name;}
+    else if(sortCol==="location"){va=a.location;vb=b.location;}
+    else if(sortCol==="last"){va=a.last||"";vb=b.last||"";}
+    else{va=a.due?a.due.getTime():(sortDir==="asc"?Infinity:-Infinity);vb=b.due?b.due.getTime():(sortDir==="asc"?Infinity:-Infinity);}
+    return(va<vb?-1:va>vb?1:0)*(sortDir==="asc"?1:-1);
+  });
+  return rows;
+}
+
+// ── render ─────────────────────────────────────────────────────────────────
+function render(){
+  const rows=visible();
+  const all=employees.map(enriched).filter(e=>!e.terminated);
+  const termCount=employees.filter(e=>e.terminated).length;
+
+  // update filter button labels
+  document.getElementById("btn-overdue").textContent=`Overdue (${all.filter(e=>e.status==="overdue").length})`;
+  document.getElementById("btn-soon").textContent=`Due soon (${all.filter(e=>e.status==="due-soon").length})`;
+  document.getElementById("btn-ok").textContent=`Current (${all.filter(e=>e.status==="ok").length})`;
+  document.getElementById("btn-pending").textContent=`Pending (${all.filter(e=>e.status==="pending").length})`;
+  document.getElementById("term-btn").textContent=showTerm?`← Active staff`:`Terminated (${termCount})`;
+
+  // sort arrows
+  ["name","location","last","due"].forEach(c=>{
+    const el=document.getElementById("s-"+c);
+    if(el) el.textContent=sortCol===c?(sortDir==="asc"?"↑":"↓"):"";
+  });
+
+  const tbody=document.getElementById("tbody");
+  if(!rows.length){ tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:2rem">No employees match this filter.</td></tr>`; return; }
+
+  tbody.innerHTML=rows.map(e=>{
+    const isEdit=editId===e.id;
+    const sc={overdue:"s-overdue","due-soon":"s-soon",ok:"s-ok",pending:"s-pending"}[e.status];
+    const sl={overdue:"Overdue","due-soon":"Due soon",ok:"Current",pending:"Pending hire"}[e.status];
+    const locs=(e.country==="US"?US_STATES:CA_PROVS).map(l=>`<option${l===e.location?" selected":""}>${l}</option>`).join("");
+
+    if(isEdit) return `
+      <tr style="background:#f0f9ff">
+        <td><input type="text" value="${esc(e.name)}" id="ei-name" style="width:100%"/></td>
+        <td><select id="ei-country" onchange="editCountryChange()" style="width:52px">
+          <option${e.country==="US"?" selected":""} value="US">US</option>
+          <option${e.country==="CA"?" selected":""} value="CA">CA</option>
+        </select></td>
+        <td><select id="ei-location" style="min-width:100px">${locs}</select></td>
+        <td style="text-align:center"><input type="checkbox" id="ei-manager"${e.manager?" checked":""}></td>
+        <td><input type="date" id="ei-last" value="${e.last||""}" style="width:130px"/></td>
+        <td style="color:#94a3b8">—</td>
+        <td style="color:#94a3b8">—</td>
+        <td></td>
+        <td><div class="acts">
+          <button class="act-btn save" onclick="saveInline(${e.id})">Save</button>
+          <button class="act-btn cancel" onclick="cancelEdit()">✕</button>
+        </div></td>
+      </tr>`;
+
+    return `
+      <tr>
+        <td><strong>${esc(e.name)}</strong></td>
+        <td style="font-size:11px;color:#94a3b8">${e.country}</td>
+        <td>${esc(e.location)}</td>
+        <td>${e.manager?"Yes":"No"}</td>
+        <td>${e.last?fmtFull(e.last):`<em style="color:#94a3b8">Not yet</em>`}</td>
+        <td>${e.due?fmtMon(e.due):"—"}</td>
+        <td style="color:#64748b;font-size:12px">${e.months===12?"Annual":"Biennial"}</td>
+        <td><span class="pill-status ${sc}">${sl}</span></td>
+        <td><div class="acts">
+          <button class="act-btn" onclick="startEdit(${e.id})">Edit</button>
+          ${showTerm
+            ? `<button class="act-btn restore" onclick="toggleTerm(${e.id})">↩ Restore</button>
+               <button class="act-btn danger" onclick="askDelete(${e.id})">Delete</button>`
+            : `<button class="act-btn term" onclick="toggleTerm(${e.id})" title="Mark terminated">✕</button>`
+          }
+        </div></td>
+      </tr>`;
+  }).join("");
+}
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+// ── inline edit ────────────────────────────────────────────────────────────
+function startEdit(id){ editId=id; render(); }
+function cancelEdit(){ editId=null; render(); }
+
+function editCountryChange(){
+  const c=document.getElementById("ei-country").value;
+  const loc=document.getElementById("ei-location");
+  const opts=(c==="US"?US_STATES:CA_PROVS);
+  loc.innerHTML=opts.map(l=>`<option>${l}</option>`).join("");
+}
+
+function saveInline(id){
+  const name=document.getElementById("ei-name").value.trim();
+  if(!name)return;
+  const last=document.getElementById("ei-last").value||null;
+  employees=employees.map(e=>e.id===id?{...e,
+    name,
+    country:document.getElementById("ei-country").value,
+    location:document.getElementById("ei-location").value,
+    manager:document.getElementById("ei-manager").checked,
+    last,
+    newHire:!last&&e.newHire,
+  }:e);
+  save(); editId=null; render();
+}
+
+// ── add modal ──────────────────────────────────────────────────────────────
+function updateLocationOptions(){
+  const c=document.getElementById("f-country").value;
+  const sel=document.getElementById("f-location");
+  sel.innerHTML=(c==="US"?US_STATES:CA_PROVS).map(l=>`<option>${l}</option>`).join("");
+}
+
+function openAdd(){
+  modalMode="add"; modalId=null;
+  document.getElementById("modal-title").textContent="Add employee";
+  document.getElementById("f-name").value="";
+  document.getElementById("f-country").value="US";
+  updateLocationOptions();
+  document.getElementById("f-manager").checked=false;
+  document.getElementById("f-last").value="";
+  document.getElementById("modal").style.display="flex";
+}
+
+function closeModal(){ document.getElementById("modal").style.display="none"; }
+
+function saveModal(){
+  const name=document.getElementById("f-name").value.trim();
+  if(!name)return;
+  const last=document.getElementById("f-last").value||null;
+  const newId=employees.length?Math.max(...employees.map(e=>e.id))+1:1;
+  employees.push({
+    id:newId,
+    name,
+    country:document.getElementById("f-country").value,
+    location:document.getElementById("f-location").value,
+    manager:document.getElementById("f-manager").checked,
+    last,
+    newHire:!last,
+    terminated:false,
+  });
+  save(); closeModal(); render();
+}
+
+// ── terminate / delete ─────────────────────────────────────────────────────
+function toggleTerm(id){
+  employees=employees.map(e=>e.id===id?{...e,terminated:!e.terminated}:e);
+  save(); render();
+}
+
+function askDelete(id){
+  pendingDeleteId=id;
+  const e=employees.find(x=>x.id===id);
+  document.getElementById("confirm-msg").textContent=`This will permanently remove ${e?e.name:"this employee"} and cannot be undone.`;
+  document.getElementById("confirm-bg").style.display="flex";
+}
+function closeConfirm(){ document.getElementById("confirm-bg").style.display="none"; pendingDeleteId=null; }
+function confirmDelete(){
+  if(pendingDeleteId===null)return;
+  employees=employees.filter(e=>e.id!==pendingDeleteId);
+  save(); closeConfirm(); render();
+}
+
+// ── filter/sort controls ───────────────────────────────────────────────────
+function setTeam(v,btn){
+  teamF=v;
+  document.querySelectorAll(".filter-row:nth-child(1) .pill").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+function setStatus(v,btn){
+  statusF=v;
+  document.querySelectorAll(".filter-row:nth-child(2) .pill").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+function toggleTermView(){
+  showTerm=!showTerm; teamF="all"; statusF="all"; searchQ="";
+  document.querySelector(".search").value="";
+  document.querySelectorAll(".filter-row:nth-child(1) .pill")[0].classList.add("active");
+  document.querySelectorAll(".filter-row:nth-child(1) .pill").forEach((b,i)=>{ if(i>0)b.classList.remove("active"); });
+  document.querySelectorAll(".filter-row:nth-child(2) .pill")[0].classList.add("active");
+  document.querySelectorAll(".filter-row:nth-child(2) .pill").forEach((b,i)=>{ if(i>0)b.classList.remove("active"); });
+  render();
+}
+function setSort(col){
+  if(sortCol===col) sortDir=sortDir==="asc"?"desc":"asc";
+  else{ sortCol=col; sortDir="asc"; }
+  render();
+}
+
+// ── close modal on bg click ────────────────────────────────────────────────
+document.getElementById("modal").addEventListener("click",function(e){ if(e.target===this)closeModal(); });
+document.getElementById("confirm-bg").addEventListener("click",function(e){ if(e.target===this)closeConfirm(); });
+
+load(); updateLocationOptions(); render();
+</script>
+</body>
+</html>
