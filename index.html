@@ -3,81 +3,125 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Harassment Training Tracker</title>
+<title>Carewell — Harassment Training Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:system-ui,sans-serif;background:#f8fafc;color:#1e293b;font-size:14px}
-  .wrap{max-width:1300px;margin:0 auto;padding:1.5rem}
-  h1{font-size:18px;font-weight:600;color:#1e293b}
-  .toolbar{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin:14px 0 10px}
-  .filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-  .filter-row span{font-size:12px;color:#64748b;min-width:44px}
-  button.pill{font-size:12px;padding:4px 12px;border-radius:99px;cursor:pointer;background:transparent;border:1px solid #e2e8f0;color:#334155;font-weight:400;transition:background .15s}
-  button.pill.active{background:#f1f5f9;border-color:#94a3b8;font-weight:600}
-  button.pill:hover{background:#f1f5f9}
-  .right-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  input[type=text],input[type=date],select{font-size:12px;padding:4px 7px;border-radius:5px;border:1px solid #cbd5e1;background:#fff;color:#1e293b}
-  input[type=text]:focus,input[type=date]:focus,select:focus{outline:2px solid #93c5fd;border-color:#93c5fd}
-  input.search{font-size:13px;padding:5px 10px;border-radius:6px;border:1px solid #e2e8f0;width:210px}
-  .btn-primary{font-size:13px;padding:6px 16px;border-radius:6px;cursor:pointer;background:#3b82f6;color:#fff;border:none;font-weight:500}
-  .btn-primary:hover{background:#2563eb}
-  .btn-primary:disabled{opacity:.5;cursor:default}
-  .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0;background:#fff}
-  table{width:100%;border-collapse:collapse}
-  th{padding:8px 10px;text-align:left;font-size:12px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;background:#f8fafc;white-space:nowrap;cursor:pointer;user-select:none}
-  th.nosort{cursor:default}
-  td{padding:8px 10px;font-size:13px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
-  tr:last-child td{border-bottom:none}
-  tr:hover td{background:#fafafa}
-  .pill-status{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:500}
-  .s-overdue{background:#fee2e2;color:#b91c1c}
-  .s-soon{background:#fef9c3;color:#92400e}
-  .s-ok{background:#dcfce7;color:#15803d}
-  .s-pending{background:#dbeafe;color:#1d4ed8}
-  .act-btn{font-size:12px;padding:3px 8px;border-radius:4px;cursor:pointer;background:transparent;border:1px solid #e2e8f0;color:#334155;white-space:nowrap}
-  .act-btn:hover{background:#f1f5f9}
-  .act-btn.save{border-color:#86efac;color:#15803d}
-  .act-btn.cancel{color:#94a3b8}
-  .act-btn.term{color:#94a3b8}
-  .act-btn.restore{color:#3b82f6;border-color:#93c5fd}
-  .act-btn.danger{color:#ef4444;border-color:#fca5a5}
-  .acts{display:flex;gap:4px}
-  .footnote{font-size:12px;color:#94a3b8;margin-top:10px}
-  /* modal */
-  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:100}
-  .modal{background:#fff;border-radius:12px;padding:1.5rem;width:100%;max-width:440px}
-  .modal h2{font-size:16px;font-weight:600;margin-bottom:16px}
-  .form-row{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
-  .form-row label{font-size:12px;color:#475569;font-weight:500}
-  .form-row input,.form-row select{width:100%}
-  .form-check{display:flex;align-items:center;gap:8px;font-size:13px;color:#334155;margin-bottom:12px}
-  .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
-  .hint{font-size:11px;color:#94a3b8;margin-top:2px}
-  /* confirm dialog */
-  .confirm-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:200}
-  .confirm-box{background:#fff;border-radius:10px;padding:1.25rem 1.5rem;max-width:360px;width:100%}
-  .confirm-box h3{font-size:15px;font-weight:600;margin-bottom:8px}
-  .confirm-box p{font-size:13px;color:#475569;margin-bottom:16px}
-  .confirm-footer{display:flex;gap:8px;justify-content:flex-end}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Figtree',system-ui,sans-serif;background:#f5f4fb;color:#191726;font-size:14px}
+/* header */
+.header{background:#260080;padding:0 2rem;display:flex;align-items:center;gap:14px;height:56px}
+.header-logo{display:flex;align-items:center;gap:10px}
+.heart{width:28px;height:28px}
+.header h1{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.header-sub{font-size:12px;color:#9E8FFF;margin-left:4px;font-weight:400}
+/* layout */
+.wrap{max-width:1340px;margin:0 auto;padding:1.25rem 1.5rem}
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:#fff;border-radius:10px;padding:.9rem 1rem;border:1px solid #ede9fb}
+.stat-num{font-size:26px;font-weight:700;color:#260080;line-height:1}
+.stat-num.danger{color:#c0392b}
+.stat-num.warn{color:#92400e}
+.stat-num.ok{color:#15803d}
+.stat-num.info{color:#1d4ed8}
+.stat-label{font-size:11px;color:#6b7280;margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+/* toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.filter-row span{font-size:12px;color:#6b7280;min-width:44px;font-weight:500}
+button.pill{font-size:12px;padding:4px 13px;border-radius:99px;cursor:pointer;background:transparent;border:1.5px solid #e2e8f0;color:#334155;font-weight:400;transition:all .15s;font-family:'Figtree',sans-serif}
+button.pill.active{background:#260080;border-color:#260080;color:#fff;font-weight:600}
+button.pill:hover:not(.active){background:#f0ecff;border-color:#9E8FFF}
+.right-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type=text],input[type=date],select{font-size:12px;padding:4px 8px;border-radius:6px;border:1.5px solid #e2e8f0;background:#fff;color:#191726;font-family:'Figtree',sans-serif}
+input[type=text]:focus,input[type=date]:focus,select:focus{outline:none;border-color:#5825E5;box-shadow:0 0 0 3px rgba(88,37,229,.12)}
+input.search{font-size:13px;padding:6px 11px;border-radius:8px;border:1.5px solid #e2e8f0;width:220px;font-family:'Figtree',sans-serif}
+/* primary button */
+.btn-primary{font-size:13px;padding:6px 18px;border-radius:8px;cursor:pointer;background:#5825E5;color:#fff;border:none;font-weight:600;font-family:'Figtree',sans-serif;transition:background .15s}
+.btn-primary:hover{background:#260080}
+.btn-primary:disabled{opacity:.5;cursor:default}
+/* tabs */
+.tabs{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid #ede9fb}
+.tab{font-size:13px;font-weight:600;padding:8px 20px;border:none;background:transparent;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:'Figtree',sans-serif;transition:all .15s}
+.tab.active{color:#260080;border-bottom-color:#5825E5}
+.tab:hover:not(.active){color:#5825E5}
+/* table */
+.table-wrap{overflow-x:auto;border-radius:0 0 12px 12px;border:1px solid #ede9fb;border-top:none;background:#fff}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 11px;text-align:left;font-size:11px;font-weight:700;color:#6b7280;border-bottom:1px solid #ede9fb;background:#faf9ff;white-space:nowrap;cursor:pointer;user-select:none;text-transform:uppercase;letter-spacing:.5px}
+th.nosort{cursor:default}
+td{padding:9px 11px;font-size:13px;border-bottom:1px solid #f5f4fb;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#faf9ff}
+.pill-status{display:inline-block;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.s-overdue{background:#fee2e2;color:#b91c1c}
+.s-soon{background:#fef9c3;color:#92400e}
+.s-ok{background:#dcfce7;color:#15803d}
+.s-pending{background:#dbeafe;color:#1d4ed8}
+.s-term{background:#f3f4f6;color:#6b7280}
+/* action buttons */
+.act-btn{font-size:12px;padding:3px 9px;border-radius:5px;cursor:pointer;background:transparent;border:1.5px solid #e2e8f0;color:#334155;white-space:nowrap;font-family:'Figtree',sans-serif;transition:all .15s}
+.act-btn:hover{background:#f0ecff;border-color:#9E8FFF}
+.act-btn.save{border-color:#86efac;color:#15803d}
+.act-btn.cancel{color:#94a3b8}
+.act-btn.term{color:#94a3b8}
+.act-btn.restore{color:#5825E5;border-color:#c4b5fd}
+.act-btn.danger{color:#ef4444;border-color:#fca5a5}
+.acts{display:flex;gap:4px}
+.footnote{font-size:11px;color:#9ca3af;margin-top:10px}
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(38,0,128,.35);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:#fff;border-radius:14px;padding:1.75rem;width:100%;max-width:440px;border-top:4px solid #5825E5}
+.modal h2{font-size:16px;font-weight:700;margin-bottom:18px;color:#260080}
+.form-row{display:flex;flex-direction:column;gap:3px;margin-bottom:13px}
+.form-row label{font-size:12px;color:#475569;font-weight:600}
+.form-row input,.form-row select{width:100%}
+.form-check{display:flex;align-items:center;gap:8px;font-size:13px;color:#334155;margin-bottom:13px}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.hint{font-size:11px;color:#9ca3af;margin-top:3px}
+/* confirm */
+.confirm-bg{position:fixed;inset:0;background:rgba(38,0,128,.35);display:flex;align-items:center;justify-content:center;z-index:200}
+.confirm-box{background:#fff;border-radius:12px;padding:1.5rem;max-width:360px;width:100%;border-top:4px solid #ef4444}
+.confirm-box h3{font-size:15px;font-weight:700;margin-bottom:8px}
+.confirm-box p{font-size:13px;color:#475569;margin-bottom:18px}
+.confirm-footer{display:flex;gap:8px;justify-content:flex-end}
+/* edit row highlight */
+tr.editing td{background:#f5f3ff!important}
+/* term row */
+tr.term-row td{color:#9ca3af}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-    <h1>Harassment Training Tracker</h1>
+
+<div class="header">
+  <div class="header-logo">
+    <svg class="heart" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 34S6 24.5 6 15a8 8 0 0116 0 8 8 0 0116 0c0 9.5-14 19-18 19z" fill="#FA5762"/>
+      <path d="M20 34c1.5-1 4-3 6.5-5.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="header h1" style="font-size:20px;font-weight:700;color:#fff;font-family:'Figtree',sans-serif">Carewell</span>
+  </div>
+  <span style="color:#9E8FFF;font-size:13px;margin-left:8px;font-weight:500">Harassment Training Tracker</span>
+  <div style="margin-left:auto">
     <button class="btn-primary" onclick="openAdd()">+ Add employee</button>
   </div>
+</div>
 
+<div class="wrap">
+  <!-- stat cards -->
+  <div class="stats" id="stats"></div>
+
+  <!-- toolbar -->
   <div class="toolbar">
     <div>
       <div class="filter-row">
-        <span>Team:</span>
+        <span>Team</span>
         <button class="pill active" onclick="setTeam('all',this)">All</button>
         <button class="pill" onclick="setTeam('US',this)">US</button>
         <button class="pill" onclick="setTeam('CA',this)">Canada</button>
       </div>
-      <div class="filter-row">
-        <span>Status:</span>
+      <div class="filter-row" id="status-filters">
+        <span>Status</span>
         <button class="pill active" onclick="setStatus('all',this)">All</button>
         <button class="pill" onclick="setStatus('overdue',this)" id="btn-overdue">Overdue</button>
         <button class="pill" onclick="setStatus('due-soon',this)" id="btn-soon">Due soon</button>
@@ -86,9 +130,14 @@
       </div>
     </div>
     <div class="right-tools">
-      <button class="pill" id="term-btn" onclick="toggleTermView()">Terminated (0)</button>
       <input class="search" type="text" placeholder="Search name or location…" oninput="searchQ=this.value;render()"/>
     </div>
+  </div>
+
+  <!-- tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="setTab('active',this)">Active staff</button>
+    <button class="tab" onclick="setTab('terminated',this)" id="term-tab">Terminated (0)</button>
   </div>
 
   <div class="table-wrap">
@@ -96,9 +145,9 @@
       <thead>
         <tr>
           <th onclick="setSort('name')">Name <span id="s-name"></span></th>
-          <th class="nosort"></th>
+          <th class="nosort" style="width:42px"></th>
           <th onclick="setSort('location')">Location <span id="s-location"></span></th>
-          <th class="nosort">Manager</th>
+          <th class="nosort">Mgr</th>
           <th onclick="setSort('last')">Last trained <span id="s-last"></span></th>
           <th onclick="setSort('due')">Due by <span id="s-due"></span></th>
           <th class="nosort">Cycle</th>
@@ -109,7 +158,7 @@
       <tbody id="tbody"></tbody>
     </table>
   </div>
-  <p class="footnote">Due soon = within 60 days &middot; Ontario = annual (OHSA) &middot; All others = biennial company policy &middot; Data saved in your browser</p>
+  <p class="footnote">Due soon = within 60 days &nbsp;·&nbsp; Ontario = annual (OHSA) &nbsp;·&nbsp; All others = biennial company policy &nbsp;·&nbsp; Data saved in your browser</p>
 </div>
 
 <!-- Add/Edit modal -->
@@ -142,7 +191,7 @@
 <div class="confirm-bg" id="confirm-bg" style="display:none">
   <div class="confirm-box">
     <h3>Permanently delete?</h3>
-    <p id="confirm-msg">This will remove the employee record entirely and cannot be undone.</p>
+    <p id="confirm-msg">This cannot be undone.</p>
     <div class="confirm-footer">
       <button class="act-btn cancel" onclick="closeConfirm()">Cancel</button>
       <button class="act-btn danger" onclick="confirmDelete()">Delete</button>
@@ -151,113 +200,298 @@
 </div>
 
 <script>
-const STATE_RULES = {
-  "Florida":{"months":24},"Virginia":{"months":24},"North Carolina":{"months":24},
-  "Massachusetts":{"months":24},"Pennsylvania":{"months":24},"South Carolina":{"months":24},
-  "Georgia":{"months":24},"Washington":{"months":24},"Oregon":{"months":24},"Idaho":{"months":24},
-  "Ontario":{"months":12},"Alberta":{"months":24},
-  "British Columbia":{"months":24},"Manitoba":{"months":24},"New Brunswick":{"months":24},
-  "Newfoundland and Labrador":{"months":24},"Nova Scotia":{"months":24},
-  "Prince Edward Island":{"months":24},"Quebec":{"months":24},"Saskatchewan":{"months":24},
-  "Alaska":{"months":24},"Arizona":{"months":24},"Arkansas":{"months":24},"California":{"months":24},
-  "Colorado":{"months":24},"Connecticut":{"months":24},"Delaware":{"months":24},
-  "Hawaii":{"months":24},"Illinois":{"months":24},"Indiana":{"months":24},"Iowa":{"months":24},
-  "Kansas":{"months":24},"Kentucky":{"months":24},"Louisiana":{"months":24},"Maine":{"months":24},
-  "Maryland":{"months":24},"Michigan":{"months":24},"Minnesota":{"months":24},
-  "Mississippi":{"months":24},"Missouri":{"months":24},"Montana":{"months":24},
-  "Nebraska":{"months":24},"Nevada":{"months":24},"New Hampshire":{"months":24},
-  "New Jersey":{"months":24},"New Mexico":{"months":24},"New York":{"months":24},
-  "North Dakota":{"months":24},"Ohio":{"months":24},"Oklahoma":{"months":24},
-  "Rhode Island":{"months":24},"South Dakota":{"months":24},"Tennessee":{"months":24},
-  "Texas":{"months":24},"Utah":{"months":24},"Vermont":{"months":24},
-  "West Virginia":{"months":24},"Wisconsin":{"months":24},"Wyoming":{"months":24},
+const STATE_RULES={
+  "Florida":{months:24},"Virginia":{months:24},"North Carolina":{months:24},
+  "Massachusetts":{months:24},"Pennsylvania":{months:24},"South Carolina":{months:24},
+  "Georgia":{months:24},"Washington":{months:24},"Oregon":{months:24},"Idaho":{months:24},
+  "Ontario":{months:12},"Alberta":{months:24},"British Columbia":{months:24},
+  "Manitoba":{months:24},"New Brunswick":{months:24},"Newfoundland and Labrador":{months:24},
+  "Nova Scotia":{months:24},"Prince Edward Island":{months:24},"Quebec":{months:24},
+  "Saskatchewan":{months:24}
 };
 const US_STATES=["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
 const CA_PROVS=["Alberta","British Columbia","Manitoba","New Brunswick","Newfoundland and Labrador","Nova Scotia","Ontario","Prince Edward Island","Quebec","Saskatchewan"];
 
-const SEED=[
-  {name:"Jessica Mollica",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false},
-  {name:"Bianca Padilla",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Brianna Maguire",country:"US",location:"Virginia",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Brittany Musil",country:"US",location:"North Carolina",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Elena Silva",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Evan Nudd",country:"US",location:"Massachusetts",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Evan Wexler",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Jennifer Ouellette",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Jesse Hardt",country:"US",location:"Virginia",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Jonathan Magolnick",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Jonathan Schall",country:"US",location:"Pennsylvania",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Jonathan Valliere",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Lauren Pennington",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Lesli McMakin",country:"US",location:"South Carolina",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Lourdes Magolnick",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Meghan Rowledge",country:"US",location:"Massachusetts",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Mercy Padilla",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Mike Pacifico",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Nadia Bollin",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Reagan Friday",country:"US",location:"North Carolina",manager:true,last:"2025-05-01",newHire:false},
-  {name:"Robert Foley",country:"US",location:"Washington",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Steph Meyer",country:"US",location:"Oregon",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Tarah Kendall",country:"US",location:"Virginia",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Trevor Ballard",country:"US",location:"Georgia",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Bill Ulma",country:"US",location:"Pennsylvania",manager:false,last:"2025-10-01",newHire:false},
-  {name:"Noelle Suarez",country:"US",location:"Florida",manager:false,last:"2026-03-01",newHire:false},
-  {name:"Zach Borgman",country:"US",location:"Idaho",manager:false,last:"2026-03-01",newHire:false},
-  {name:"Andrea Baert",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Andrea Duchon",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false},
-  {name:"Cassandra Desrochers",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Danielle Evans",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Elisabeth Golubova",country:"CA",location:"Alberta",manager:false,last:null,newHire:true},
-  {name:"Gary Van Deelen",country:"CA",location:"Alberta",manager:false,last:"2025-01-01",newHire:false},
-  {name:"Jaslyne Felker",country:"CA",location:"Alberta",manager:false,last:"2026-02-01",newHire:false},
-  {name:"Jessica Enwood",country:"CA",location:"Alberta",manager:false,last:null,newHire:true},
-  {name:"Jessica Gamez",country:"CA",location:"Alberta",manager:false,last:"2026-03-01",newHire:false},
-  {name:"Kim Thrasher",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false},
-  {name:"Melanie Cain",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Ravneet Gill",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
-  {name:"Ryan Biggs",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false},
-  {name:"Solomon Mulugeta",country:"CA",location:"Alberta",manager:false,last:"2026-02-01",newHire:false},
-  {name:"Wendy Baldwin",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false},
+// ── seed data ──────────────────────────────────────────────────────────────
+// Active employees — original confirmed dates
+const ACTIVE=[
+  // US
+  {name:"Jessica Mollica",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false,terminated:false},
+  {name:"Bianca Padilla",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Brianna Maguire",country:"US",location:"Virginia",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Brittany Musil",country:"US",location:"North Carolina",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Elena Silva",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Evan Nudd",country:"US",location:"Massachusetts",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Evan Wexler",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Jennifer Ouellette",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Jesse Hardt",country:"US",location:"Virginia",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Jonathan Magolnick",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Jonathan Schall",country:"US",location:"Pennsylvania",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Jonathan Valliere",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Lauren Pennington",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Lesli McMakin",country:"US",location:"South Carolina",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Lourdes Magolnick",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Meghan Rowledge",country:"US",location:"Massachusetts",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Mercy Padilla",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Mike Pacifico",country:"US",location:"Florida",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Nadia Bollin",country:"US",location:"Florida",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Reagan Friday",country:"US",location:"North Carolina",manager:true,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Robert Foley",country:"US",location:"Washington",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Steph Meyer",country:"US",location:"Oregon",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Tarah Kendall",country:"US",location:"Virginia",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Trevor Ballard",country:"US",location:"Georgia",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Bill Ulma",country:"US",location:"Pennsylvania",manager:false,last:"2025-10-01",newHire:false,terminated:false},
+  {name:"Noelle Suarez",country:"US",location:"Florida",manager:false,last:"2026-03-01",newHire:false,terminated:false},
+  {name:"Zach Borgman",country:"US",location:"Idaho",manager:false,last:"2026-03-01",newHire:false,terminated:false},
+  // Canada - active
+  {name:"Andrea Baert",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Andrea Duchon",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false,terminated:false},
+  {name:"Cassandra Desrochers",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Danielle Evans",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Elisabeth Golubova",country:"CA",location:"Alberta",manager:false,last:null,newHire:true,terminated:false},
+  {name:"Gary Van Deelen",country:"CA",location:"Alberta",manager:false,last:"2025-01-01",newHire:false,terminated:false},
+  {name:"Jaslyne Felker",country:"CA",location:"Alberta",manager:false,last:"2026-02-01",newHire:false,terminated:false},
+  {name:"Jessica Enwood",country:"CA",location:"Alberta",manager:false,last:null,newHire:true,terminated:false},
+  {name:"Jessica Gamez",country:"CA",location:"Alberta",manager:false,last:"2026-03-01",newHire:false,terminated:false},
+  {name:"Kim Thrasher",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false,terminated:false},
+  {name:"Melanie Cain",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Ravneet Gill",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+  {name:"Ryan Biggs",country:"CA",location:"Alberta",manager:false,last:"2025-02-01",newHire:false,terminated:false},
+  {name:"Solomon Mulugeta",country:"CA",location:"Alberta",manager:false,last:"2026-02-01",newHire:false,terminated:false},
+  {name:"Wendy Baldwin",country:"CA",location:"Ontario",manager:false,last:"2025-05-01",newHire:false,terminated:false},
+];
+
+// Terminated — pulled from historical training logs, most recent date used
+const TERMINATED=[
+  // from 2024 logs
+  {name:"Ryan Martin",country:"US",location:"Virginia",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Daryl Altenhof",country:"US",location:"Florida",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Mary Lugones",country:"US",location:"Florida",manager:true,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Jonah Erickson",country:"US",location:"Florida",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Andrew Agard",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Elizabeth McKen",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Lashanna Morris",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Maria Cepeda Roa",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Michael McCleary",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Michelle Uche",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Taylor Wilson",country:"CA",location:"Ontario",manager:false,last:"2024-02-01",newHire:false,terminated:true},
+  {name:"Jack Ward",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Catherine Mwitta",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Haley Dwyer",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Aziz Patrawala",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Sonia Tewari",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Angel Daniel",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Jussell Ramlal",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Michael Cameron",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Sophia Awuku",country:"CA",location:"Ontario",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Amanda Ryzyk",country:"US",location:"Florida",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Vincent Signorelli",country:"US",location:"Florida",manager:false,last:"2024-03-01",newHire:false,terminated:true},
+  {name:"Biba Frants",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"James Stinson",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Jolenna O'Sullivan",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Valerie Magnone",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Serina Agard",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Safia Gonzalez",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Aubin Cooper",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Kristen Aguinaldo",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Geoff Klapisch",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Katie Evans",country:"US",location:"Florida",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Naushin Farazi",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Oneil Campbell",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Vivek Thakkar",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Constanza Armendaris",country:"US",location:"Florida",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Janielle Kelly",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Felicia Barker",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Asmaa Mohamed",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Thi Thach",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Eunice Adjei",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Jeromme Graham",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Aley McCreath",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Deja Williams",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Natalia Brown",country:"CA",location:"Ontario",manager:false,last:"2024-04-01",newHire:false,terminated:true},
+  {name:"Zack Lewis",country:"US",location:"Florida",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Aaron Nathan",country:"US",location:"Florida",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Allen Preisman",country:"US",location:"Florida",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Cecilia Chan",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Charlotte Hand-Ross",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Collins Chukwu",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Gail Jordan",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Kaylin Hauzar",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Malik Moosa",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Nadia Malcolm",country:"CA",location:"Ontario",manager:false,last:"2024-06-01",newHire:false,terminated:true},
+  {name:"Nevenka Zivkovich",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Pia McKenzie",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Travian Parker",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Trishana Morris",country:"CA",location:"Ontario",manager:false,last:"2024-05-01",newHire:false,terminated:true},
+  {name:"Lee Allen",country:"US",location:"Florida",manager:false,last:"2024-06-01",newHire:false,terminated:true},
+  {name:"Mitch Lundstrom",country:"US",location:"Florida",manager:false,last:"2024-06-01",newHire:false,terminated:true},
+  {name:"Catherine Maria",country:"US",location:"Florida",manager:false,last:"2024-08-01",newHire:false,terminated:true},
+  {name:"Chris Bourque",country:"CA",location:"Ontario",manager:false,last:"2024-09-01",newHire:false,terminated:true},
+  {name:"Will Wheatley",country:"US",location:"Florida",manager:false,last:"2024-10-01",newHire:false,terminated:true},
+  {name:"Alison Sandler",country:"US",location:"Florida",manager:false,last:"2024-10-01",newHire:false,terminated:true},
+  {name:"Mike Bandela",country:"US",location:"Florida",manager:false,last:"2024-10-01",newHire:false,terminated:true},
+  {name:"Andrea Wolfe",country:"US",location:"Virginia",manager:true,last:"2024-01-01",newHire:false,terminated:true},
+  // from 2023 logs
+  {name:"Darius Mitchell",country:"US",location:"Florida",manager:false,last:"2023-01-01",newHire:false,terminated:true},
+  {name:"Tharii Hill",country:"US",location:"Florida",manager:false,last:"2023-01-01",newHire:false,terminated:true},
+  {name:"Emily Puls",country:"US",location:"Florida",manager:false,last:"2023-02-01",newHire:false,terminated:true},
+  {name:"Jason Klinghoffer",country:"US",location:"Florida",manager:true,last:"2023-03-01",newHire:false,terminated:true},
+  {name:"Reinier Kaper",country:"CA",location:"Ontario",manager:false,last:"2023-04-01",newHire:false,terminated:true},
+  {name:"Eilish McGowan",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Alicia Alexander",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Mohammed Al-Maghazachi",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Lois Ricketts",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Kawsar Mohamud",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Kaosarat Sikirulahi",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Adeola Yusuf",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Bunmi Adenigba",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Gabrielle Wright",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Jazmine Wellington",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Warda Shahbaz",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Winifred Uyanwune",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Tanya Lewis",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Penny Roberts",country:"CA",location:"Ontario",manager:false,last:"2023-06-01",newHire:false,terminated:true},
+  {name:"Ben Brake",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Gillian Elder",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Chrystal McKenzie-McLean",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Samsam Abdi",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Nadine Henry",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Adetokunbo Oluyombo",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Fareena Khan",country:"CA",location:"Ontario",manager:false,last:"2023-07-01",newHire:false,terminated:true},
+  {name:"Zac Plummer",country:"US",location:"Florida",manager:false,last:"2023-08-01",newHire:false,terminated:true},
+  {name:"Kelli Durkin",country:"US",location:"Florida",manager:false,last:"2023-08-01",newHire:false,terminated:true},
+  {name:"Kevin Kennedy",country:"US",location:"Florida",manager:true,last:"2023-10-01",newHire:false,terminated:true},
+  {name:"Sam Rassner",country:"US",location:"Florida",manager:true,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Kieron O'Sullivan",country:"CA",location:"Ontario",manager:false,last:"2023-11-01",newHire:false,terminated:true},
+  {name:"Elizabeth Mallory",country:"US",location:"Florida",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Kimmie Shabtai",country:"CA",location:"Ontario",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  // from 2024 Canada logs
+  {name:"John Tinajero",country:"CA",location:"Ontario",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Michael Zareski",country:"CA",location:"Ontario",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Shakiva Williams",country:"CA",location:"Ontario",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"Manny Yadav",country:"CA",location:"Ontario",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  {name:"David Kuczek",country:"CA",location:"Ontario",manager:false,last:"2024-01-01",newHire:false,terminated:true},
+  // 2025 new hires (not on active list — terminated)
+  {name:"Adam Froggatt",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Aday Anifowoshe",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Sonja Sedillo",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Iza Lumpio",country:"CA",location:"Ontario",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Mitch Foy",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Frances Fayia",country:"CA",location:"Ontario",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Noelle Spencer",country:"US",location:"Florida",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Wendy Moneke",country:"CA",location:"Ontario",manager:false,last:"2025-01-01",newHire:false,terminated:true},
+  {name:"Mary Cruz",country:"US",location:"Florida",manager:false,last:"2025-02-01",newHire:false,terminated:true},
+  {name:"Carissa Duru",country:"CA",location:"Ontario",manager:false,last:"2025-02-01",newHire:false,terminated:true},
+  // 2026 (not on active list)
+  {name:"Audrey Ajose",country:"CA",location:"Ontario",manager:false,last:"2026-02-01",newHire:false,terminated:true},
+  {name:"Jasmine Becker",country:"US",location:"Florida",manager:false,last:"2026-03-01",newHire:false,terminated:true},
+  // Q4 2022 only (no subsequent record found)
+  {name:"Julie Boston",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Dora Williams",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Aaron Huggins",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Slaton Carter",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Adriana Epley",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Alex Minton",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Brenda Thompson",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"E Thompson",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Tara Villar",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Zamora Figueiredo",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Tatiana Perez Allen",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Yasmine Brown",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Brandi Ledbetter",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Elisha Geske",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Kate Ryan",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Jaylin Phillips",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Loretta Pitilli",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Celine Hoffman",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Sian Williams",country:"CA",location:"Ontario",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Alan Vazquez",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Tara Silha",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Martina Glenn",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Amber Anderson",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Shelby Walker",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Tanya Minter",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Adrienne Martin",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Alisa Krentz",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Anna-Maria Stabile",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Anthony Soto",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Brittany Handford",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Chandra Thomas",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Charlie Rivas",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Daniel Simmonds",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Dylan Perera",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Gabriela Neal",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Gwendolyn Smith",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Jack Vejvoda",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Jasmine Feliciano",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Jennifer Mitchell",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Julio Fernandez",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Kathryn Oden",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Kiara Gonzalez",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Kristen Benedict",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Krystyna Keim",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Kyle Broyles",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Kyle Lanzen",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Lesli Hooker",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Lucy Wan",country:"CA",location:"Ontario",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Matthew Carlotta",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Natalie Soussou",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Reagan Adams",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Rosa Platero",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Sarah Sperling",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Savannah Maguire",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Shanequa Burrows",country:"CA",location:"Ontario",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Stephanie Menken",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Tanner Alberts",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Tyhaiya Jones",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Wilhelmy Pantaleon",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Xavier McLeish",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
+  {name:"Xavier McLeish",country:"US",location:"Florida",manager:false,last:"2022-12-01",newHire:false,terminated:true},
 ];
 
 // ── state ──────────────────────────────────────────────────────────────────
-let employees = [];
-let teamF="all", statusF="all", searchQ="", sortCol="due", sortDir="asc", showTerm=false;
-let editId=null, modalMode="add", modalId=null, pendingDeleteId=null;
+let employees=[];
+let teamF="all",statusF="all",searchQ="",sortCol="due",sortDir="asc",currentTab="active";
+let editId=null,pendingDeleteId=null;
 
 function load(){
-  const raw=localStorage.getItem("ht_employees");
+  const raw=localStorage.getItem("cw_ht_v2");
   if(raw){ employees=JSON.parse(raw); }
-  else { employees=SEED.map((e,i)=>({...e,id:i+1,terminated:false})); save(); }
+  else{
+    const all=[...ACTIVE,...TERMINATED];
+    // dedupe by name
+    const seen=new Set();
+    employees=all.filter(e=>{
+      if(seen.has(e.name))return false;
+      seen.add(e.name);return true;
+    }).map((e,i)=>({...e,id:i+1}));
+    save();
+  }
 }
-function save(){ localStorage.setItem("ht_employees",JSON.stringify(employees)); }
+function save(){ localStorage.setItem("cw_ht_v2",JSON.stringify(employees)); }
 
 // ── date helpers ───────────────────────────────────────────────────────────
-function parseLocal(s){ if(!s)return null; const[y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
-function addMonths(s,n){ const[y,m,d]=s.split("-").map(Number); return new Date(y,m-1+n,d); }
+function parseLocal(s){ if(!s)return null; const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d); }
+function addMonths(s,n){ const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1+n,d); }
 function fmtMon(d){ return d.toLocaleDateString("en-US",{month:"short",year:"numeric"}); }
-function fmtFull(s){ if(!s)return null; const d=parseLocal(s); return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }
-function today(){ const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate()); }
-
-function statusOf(dueDate){
-  const diff=(dueDate-today())/(1000*60*60*24);
-  if(diff<0)return"overdue"; if(diff<=60)return"due-soon"; return"ok";
-}
+function fmtFull(s){ if(!s)return null; const d=parseLocal(s);return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }
+function today(){ const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate()); }
+function statusOf(due){ const diff=(due-today())/(864e5); if(diff<0)return"overdue"; if(diff<=60)return"due-soon"; return"ok"; }
 function getRule(loc){ return STATE_RULES[loc]||{months:24}; }
-
 function enriched(e){
   const rule=getRule(e.location);
-  if(!e.last){ return{...e,due:null,status:"pending",months:rule.months}; }
+  if(!e.last)return{...e,due:null,status:"pending",months:rule.months};
   const due=addMonths(e.last,rule.months);
   return{...e,due,status:statusOf(due),months:rule.months};
 }
 
-// ── filters & sort ─────────────────────────────────────────────────────────
+// ── visible rows ───────────────────────────────────────────────────────────
 function visible(){
+  const showTerm=currentTab==="terminated";
   let rows=employees.map(enriched).filter(e=>showTerm?e.terminated:!e.terminated);
-  if(teamF!=="all") rows=rows.filter(e=>e.country===teamF);
-  if(statusF!=="all") rows=rows.filter(e=>e.status===statusF);
-  if(searchQ) rows=rows.filter(e=>e.name.toLowerCase().includes(searchQ.toLowerCase())||e.location.toLowerCase().includes(searchQ.toLowerCase()));
+  if(teamF!=="all")rows=rows.filter(e=>e.country===teamF);
+  if(statusF!=="all"&&!showTerm)rows=rows.filter(e=>e.status===statusF);
+  if(searchQ)rows=rows.filter(e=>e.name.toLowerCase().includes(searchQ.toLowerCase())||e.location.toLowerCase().includes(searchQ.toLowerCase()));
   rows.sort((a,b)=>{
     let va,vb;
     if(sortCol==="name"){va=a.name;vb=b.name;}
@@ -271,110 +505,107 @@ function visible(){
 
 // ── render ─────────────────────────────────────────────────────────────────
 function render(){
-  const rows=visible();
-  const all=employees.map(enriched).filter(e=>!e.terminated);
+  const showTerm=currentTab==="terminated";
+  const active=employees.map(enriched).filter(e=>!e.terminated);
   const termCount=employees.filter(e=>e.terminated).length;
 
-  // update filter button labels
-  document.getElementById("btn-overdue").textContent=`Overdue (${all.filter(e=>e.status==="overdue").length})`;
-  document.getElementById("btn-soon").textContent=`Due soon (${all.filter(e=>e.status==="due-soon").length})`;
-  document.getElementById("btn-ok").textContent=`Current (${all.filter(e=>e.status==="ok").length})`;
-  document.getElementById("btn-pending").textContent=`Pending (${all.filter(e=>e.status==="pending").length})`;
-  document.getElementById("term-btn").textContent=showTerm?`← Active staff`:`Terminated (${termCount})`;
+  // stat cards
+  document.getElementById("stats").innerHTML=`
+    <div class="stat"><div class="stat-num danger">${active.filter(e=>e.status==="overdue").length}</div><div class="stat-label">Overdue</div></div>
+    <div class="stat"><div class="stat-num warn">${active.filter(e=>e.status==="due-soon").length}</div><div class="stat-label">Due Soon</div></div>
+    <div class="stat"><div class="stat-num ok">${active.filter(e=>e.status==="ok").length}</div><div class="stat-label">Current</div></div>
+    <div class="stat"><div class="stat-num info">${active.filter(e=>e.status==="pending").length}</div><div class="stat-label">Pending Hire</div></div>
+    <div class="stat"><div class="stat-num" style="color:#260080">${active.length}</div><div class="stat-label">Active Staff</div></div>
+    <div class="stat"><div class="stat-num" style="color:#6b7280">${termCount}</div><div class="stat-label">Terminated</div></div>
+  `;
+
+  // filter button labels
+  document.getElementById("btn-overdue").textContent=`Overdue (${active.filter(e=>e.status==="overdue").length})`;
+  document.getElementById("btn-soon").textContent=`Due soon (${active.filter(e=>e.status==="due-soon").length})`;
+  document.getElementById("btn-ok").textContent=`Current (${active.filter(e=>e.status==="ok").length})`;
+  document.getElementById("btn-pending").textContent=`Pending (${active.filter(e=>e.status==="pending").length})`;
+  document.getElementById("term-tab").textContent=`Terminated (${termCount})`;
+  document.getElementById("status-filters").style.display=showTerm?"none":"flex";
 
   // sort arrows
   ["name","location","last","due"].forEach(c=>{
     const el=document.getElementById("s-"+c);
-    if(el) el.textContent=sortCol===c?(sortDir==="asc"?"↑":"↓"):"";
+    if(el)el.textContent=sortCol===c?(sortDir==="asc"?"↑":"↓"):"";
   });
 
+  const rows=visible();
   const tbody=document.getElementById("tbody");
-  if(!rows.length){ tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:2rem">No employees match this filter.</td></tr>`; return; }
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:2.5rem">No employees match this filter.</td></tr>`;return;}
 
   tbody.innerHTML=rows.map(e=>{
     const isEdit=editId===e.id;
-    const sc={overdue:"s-overdue","due-soon":"s-soon",ok:"s-ok",pending:"s-pending"}[e.status];
-    const sl={overdue:"Overdue","due-soon":"Due soon",ok:"Current",pending:"Pending hire"}[e.status];
+    const sc={overdue:"s-overdue","due-soon":"s-soon",ok:"s-ok",pending:"s-pending"}[e.status]||"s-term";
+    const sl={overdue:"Overdue","due-soon":"Due soon",ok:"Current",pending:"Pending hire"}[e.status]||"—";
     const locs=(e.country==="US"?US_STATES:CA_PROVS).map(l=>`<option${l===e.location?" selected":""}>${l}</option>`).join("");
 
-    if(isEdit) return `
-      <tr style="background:#f0f9ff">
+    if(isEdit)return`
+      <tr class="editing">
         <td><input type="text" value="${esc(e.name)}" id="ei-name" style="width:100%"/></td>
-        <td><select id="ei-country" onchange="editCountryChange()" style="width:52px">
+        <td><select id="ei-country" onchange="editCountryChange()" style="width:54px">
           <option${e.country==="US"?" selected":""} value="US">US</option>
           <option${e.country==="CA"?" selected":""} value="CA">CA</option>
         </select></td>
-        <td><select id="ei-location" style="min-width:100px">${locs}</select></td>
+        <td><select id="ei-location" style="min-width:110px">${locs}</select></td>
         <td style="text-align:center"><input type="checkbox" id="ei-manager"${e.manager?" checked":""}></td>
-        <td><input type="date" id="ei-last" value="${e.last||""}" style="width:130px"/></td>
-        <td style="color:#94a3b8">—</td>
-        <td style="color:#94a3b8">—</td>
-        <td></td>
+        <td><input type="date" id="ei-last" value="${e.last||""}" style="width:136px"/></td>
+        <td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td></td>
         <td><div class="acts">
           <button class="act-btn save" onclick="saveInline(${e.id})">Save</button>
           <button class="act-btn cancel" onclick="cancelEdit()">✕</button>
         </div></td>
       </tr>`;
 
-    return `
-      <tr>
+    return`
+      <tr${e.terminated?" class='term-row'":""}>
         <td><strong>${esc(e.name)}</strong></td>
-        <td style="font-size:11px;color:#94a3b8">${e.country}</td>
+        <td style="font-size:11px;color:#9ca3af;font-weight:600">${e.country}</td>
         <td>${esc(e.location)}</td>
         <td>${e.manager?"Yes":"No"}</td>
-        <td>${e.last?fmtFull(e.last):`<em style="color:#94a3b8">Not yet</em>`}</td>
+        <td>${e.last?fmtFull(e.last):`<em style="color:#9ca3af">Not yet</em>`}</td>
         <td>${e.due?fmtMon(e.due):"—"}</td>
-        <td style="color:#64748b;font-size:12px">${e.months===12?"Annual":"Biennial"}</td>
-        <td><span class="pill-status ${sc}">${sl}</span></td>
+        <td style="color:#6b7280;font-size:12px">${e.months===12?"Annual":"Biennial"}</td>
+        <td>${e.terminated?`<span class="pill-status s-term">Terminated</span>`:`<span class="pill-status ${sc}">${sl}</span>`}</td>
         <td><div class="acts">
           <button class="act-btn" onclick="startEdit(${e.id})">Edit</button>
           ${showTerm
-            ? `<button class="act-btn restore" onclick="toggleTerm(${e.id})">↩ Restore</button>
-               <button class="act-btn danger" onclick="askDelete(${e.id})">Delete</button>`
-            : `<button class="act-btn term" onclick="toggleTerm(${e.id})" title="Mark terminated">✕</button>`
+            ?`<button class="act-btn restore" onclick="toggleTerm(${e.id})">↩ Restore</button>
+              <button class="act-btn danger" onclick="askDelete(${e.id})">Delete</button>`
+            :`<button class="act-btn term" onclick="toggleTerm(${e.id})" title="Mark terminated">✕</button>`
           }
         </div></td>
       </tr>`;
   }).join("");
 }
 
-function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
 // ── inline edit ────────────────────────────────────────────────────────────
-function startEdit(id){ editId=id; render(); }
-function cancelEdit(){ editId=null; render(); }
-
+function startEdit(id){editId=id;render();}
+function cancelEdit(){editId=null;render();}
 function editCountryChange(){
   const c=document.getElementById("ei-country").value;
   const loc=document.getElementById("ei-location");
-  const opts=(c==="US"?US_STATES:CA_PROVS);
-  loc.innerHTML=opts.map(l=>`<option>${l}</option>`).join("");
+  loc.innerHTML=(c==="US"?US_STATES:CA_PROVS).map(l=>`<option>${l}</option>`).join("");
 }
-
 function saveInline(id){
   const name=document.getElementById("ei-name").value.trim();
   if(!name)return;
   const last=document.getElementById("ei-last").value||null;
-  employees=employees.map(e=>e.id===id?{...e,
-    name,
-    country:document.getElementById("ei-country").value,
-    location:document.getElementById("ei-location").value,
-    manager:document.getElementById("ei-manager").checked,
-    last,
-    newHire:!last&&e.newHire,
-  }:e);
-  save(); editId=null; render();
+  employees=employees.map(e=>e.id===id?{...e,name,country:document.getElementById("ei-country").value,location:document.getElementById("ei-location").value,manager:document.getElementById("ei-manager").checked,last,newHire:!last&&e.newHire}:e);
+  save();editId=null;render();
 }
 
 // ── add modal ──────────────────────────────────────────────────────────────
 function updateLocationOptions(){
   const c=document.getElementById("f-country").value;
-  const sel=document.getElementById("f-location");
-  sel.innerHTML=(c==="US"?US_STATES:CA_PROVS).map(l=>`<option>${l}</option>`).join("");
+  document.getElementById("f-location").innerHTML=(c==="US"?US_STATES:CA_PROVS).map(l=>`<option>${l}</option>`).join("");
 }
-
 function openAdd(){
-  modalMode="add"; modalId=null;
   document.getElementById("modal-title").textContent="Add employee";
   document.getElementById("f-name").value="";
   document.getElementById("f-country").value="US";
@@ -383,79 +614,61 @@ function openAdd(){
   document.getElementById("f-last").value="";
   document.getElementById("modal").style.display="flex";
 }
-
-function closeModal(){ document.getElementById("modal").style.display="none"; }
-
+function closeModal(){document.getElementById("modal").style.display="none";}
 function saveModal(){
   const name=document.getElementById("f-name").value.trim();
   if(!name)return;
   const last=document.getElementById("f-last").value||null;
   const newId=employees.length?Math.max(...employees.map(e=>e.id))+1:1;
-  employees.push({
-    id:newId,
-    name,
-    country:document.getElementById("f-country").value,
-    location:document.getElementById("f-location").value,
-    manager:document.getElementById("f-manager").checked,
-    last,
-    newHire:!last,
-    terminated:false,
-  });
-  save(); closeModal(); render();
+  employees.push({id:newId,name,country:document.getElementById("f-country").value,location:document.getElementById("f-location").value,manager:document.getElementById("f-manager").checked,last,newHire:!last,terminated:false});
+  save();closeModal();render();
 }
 
 // ── terminate / delete ─────────────────────────────────────────────────────
 function toggleTerm(id){
   employees=employees.map(e=>e.id===id?{...e,terminated:!e.terminated}:e);
-  save(); render();
+  save();render();
 }
-
 function askDelete(id){
   pendingDeleteId=id;
   const e=employees.find(x=>x.id===id);
   document.getElementById("confirm-msg").textContent=`This will permanently remove ${e?e.name:"this employee"} and cannot be undone.`;
   document.getElementById("confirm-bg").style.display="flex";
 }
-function closeConfirm(){ document.getElementById("confirm-bg").style.display="none"; pendingDeleteId=null; }
+function closeConfirm(){document.getElementById("confirm-bg").style.display="none";pendingDeleteId=null;}
 function confirmDelete(){
   if(pendingDeleteId===null)return;
   employees=employees.filter(e=>e.id!==pendingDeleteId);
-  save(); closeConfirm(); render();
+  save();closeConfirm();render();
 }
 
-// ── filter/sort controls ───────────────────────────────────────────────────
+// ── filters ────────────────────────────────────────────────────────────────
+function setTab(v,btn){
+  currentTab=v;statusF="all";
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
 function setTeam(v,btn){
   teamF=v;
   document.querySelectorAll(".filter-row:nth-child(1) .pill").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  render();
+  btn.classList.add("active");render();
 }
 function setStatus(v,btn){
   statusF=v;
   document.querySelectorAll(".filter-row:nth-child(2) .pill").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  render();
-}
-function toggleTermView(){
-  showTerm=!showTerm; teamF="all"; statusF="all"; searchQ="";
-  document.querySelector(".search").value="";
-  document.querySelectorAll(".filter-row:nth-child(1) .pill")[0].classList.add("active");
-  document.querySelectorAll(".filter-row:nth-child(1) .pill").forEach((b,i)=>{ if(i>0)b.classList.remove("active"); });
-  document.querySelectorAll(".filter-row:nth-child(2) .pill")[0].classList.add("active");
-  document.querySelectorAll(".filter-row:nth-child(2) .pill").forEach((b,i)=>{ if(i>0)b.classList.remove("active"); });
-  render();
+  btn.classList.add("active");render();
 }
 function setSort(col){
-  if(sortCol===col) sortDir=sortDir==="asc"?"desc":"asc";
-  else{ sortCol=col; sortDir="asc"; }
+  if(sortCol===col)sortDir=sortDir==="asc"?"desc":"asc";
+  else{sortCol=col;sortDir="asc";}
   render();
 }
 
-// ── close modal on bg click ────────────────────────────────────────────────
-document.getElementById("modal").addEventListener("click",function(e){ if(e.target===this)closeModal(); });
-document.getElementById("confirm-bg").addEventListener("click",function(e){ if(e.target===this)closeConfirm(); });
+document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
+document.getElementById("confirm-bg").addEventListener("click",function(e){if(e.target===this)closeConfirm();});
 
-load(); updateLocationOptions(); render();
+load();updateLocationOptions();render();
 </script>
 </body>
 </html>
